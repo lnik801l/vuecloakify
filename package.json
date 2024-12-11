@@ -1,0 +1,60 @@
+{
+  "type": "module",
+  "name": "vuecloakify",
+  "version": "0.0.8",
+  "description": "",
+  "keywords": [],
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "lint:tsc": "tsc",
+    "lint:eslint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "lint": "pnpm lint:tsc && pnpm lint:eslint",
+    "build:bundle": "tsup",
+    "build": "pnpm lint && pnpm build:bundle",
+    "prepublishOnly": "pnpm build",
+    "postversion": "git push && git push --tags",
+    "preversion": "pnpm build",
+    "release": "pnpm version -m 'chore(release): %s' --"
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lnik801l/vuecloakify.git"
+  },
+  "author": "l_nik801_l",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lnik801l/vuecloakify/-/issues"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/node": "^20.11.0",
+    "esbuild-plugin-file-path-extensions": "^2.0.0",
+    "eslint": "^8.56.0",
+    "eslint-kit": "^10.7.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.3",
+    "eslint-plugin-require-node-import-prefix": "^0.0.2",
+    "tsc-alias": "^1.8.8",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@unhead/ssr": "^1.11.14",
+    "@unhead/vue": "^1.11.14",
+    "mjml": "^4.15.3",
+    "vite": "^6.0.3",
+    "vue": "^3.5.13"
+  }
+}
