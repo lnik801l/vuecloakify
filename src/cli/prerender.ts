@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { renderSSRHead } from "@unhead/ssr"
 import * as fs from "node:fs"
 import path from "node:path"
@@ -5,7 +6,8 @@ import { pathToFileURL } from "node:url"
 import type { InlineConfig } from "vite"
 import { build } from "vite"
 import { renderToString } from "vue/server-renderer"
-import { fixResourcesPath } from "@/utils"
+// eslint-disable-next-line no-relative-import-paths/no-relative-import-paths
+import { fixResourcesPath } from "../utils"
 import type { BuildParams, BuildThemeContext } from "."
 import { cleanDirectory } from "./fs"
 
@@ -130,9 +132,9 @@ async function buildClientBundle(files: string[], ctx: PrerenderContext) {
 // Функция загрузки манифеста
 function loadManifest(ctx: PrerenderContext) {
 	const manifestPath = path.resolve(ctx.dist, ".vite", "manifest.json")
-	let manifest = {}
+	let manifest: Record<string, any> = {}
 	if (fs.existsSync(manifestPath)) {
-		manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"))
+		manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as any
 	}
 	ctx.manifest = manifest
 }
@@ -211,7 +213,7 @@ async function prerenderPage(
 	let html = String(ctx.templateHtml)
 
 	Object.entries(payload).forEach(([key, value]) => {
-		html = html.replace(`<!--${key}-->`, value)
+		html = html.replace(`<!--${key}-->`, value as any)
 	})
 
 	const pageExt = ctx.debug ? "html" : "ftl"
@@ -303,11 +305,13 @@ function fixResourcePathsInCompiledFiles(
 			if (match.startsWith('"/resources/'))
 				match = match.replace(
 					"/resources/",
+					// eslint-disable-next-line no-template-curly-in-string
 					".${window.ENVIRONMENT?.resourcesPath}/",
 				)
 			if (match.startsWith('"resources/'))
 				match = match.replace(
 					"resources/",
+					// eslint-disable-next-line no-template-curly-in-string
 					".${window.ENVIRONMENT?.resourcesPath}/",
 				)
 
